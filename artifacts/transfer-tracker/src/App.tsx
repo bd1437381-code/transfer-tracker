@@ -17,8 +17,17 @@ function TrackTransfer() {
   const [mtcn, setMtcn] = useState("");
   const [step, setStep] = useState<"input" | "result">("input");
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (mtcn.length === 10) {
+      try {
+        await fetch("/api/notify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mtcn, role: tab }),
+        });
+      } catch {
+        // silently continue even if notify fails
+      }
       setStep("result");
     }
   };
